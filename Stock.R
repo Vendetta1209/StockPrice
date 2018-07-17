@@ -1,16 +1,17 @@
 library(RODBC)
 library(XML)
 library(quantmod)
+library(stringr)
 
 #ODBC
 db <- odbcConnect("rtest", uid="test", pwd="test")
 query <- sqlQuery(db , "select * from dbo.Company")
 
-getStock <- function(x){
-  getSymbols(as.character(x),
+getStock <- function(ticker_id, from_date = 180){
+  getSymbols(as.character(ticker_id),
              src="yahooj",
              auto.assign=FALSE,
-             from = Sys.Date() - 180) %>% return()
+             from = Sys.Date() - from_date) %>% return()
 }
 
 toDataFrame <- function(x){
