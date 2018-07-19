@@ -19,7 +19,7 @@ toDataFrame <- function(x){
   data.frame(date=index(x), coredata(x)) %>% return()
 }
 
-#カテゴリごとに追加
+#繧ｫ繝�繧ｴ繝ｪ縺斐→縺ｫ霑ｽ蜉
 insertSqlData <- function(ticker_id, stock_type){
   tmp <- getStock(ticker_id) %>% toDataFrame()
   for (i in 1:nrow(tmp)){
@@ -40,7 +40,7 @@ insertSqlData <- function(ticker_id, stock_type){
   }
 }
 
-#カテゴリすべて追加
+#繧ｫ繝�繧ｴ繝ｪ縺吶∋縺ｦ霑ｽ蜉
 insertSqlDataAll <- function(ticker_id){
   tmp <- getStock(ticker_id) %>% toDataFrame()
   for (i in 1:nrow(tmp)){
