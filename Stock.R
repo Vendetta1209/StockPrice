@@ -19,44 +19,10 @@ toDataFrame <- function(x){
   data.frame(date=index(x), coredata(x)) %>% return()
 }
 
-#カテゴリごとに追加
-insertSqlData <- function(ticker_id, stock_type){
+#カ�?ゴリごとに追�?
+insertSqlData <- function(ticker_id){
   tmp <- getStock(ticker_id) %>% toDataFrame()
   for (i in 1:nrow(tmp)){
-    switch(stock_type,
-           #Open
-           "1" = sqlQuery(db, str_c("INSERT INTO dbo.OpenPrice VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,2],"')")),
-           #High
-           "2" = sqlQuery(db, str_c("INSERT INTO dbo.HighPrice VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,3],"')")),
-           #Low
-           "3" = sqlQuery(db, str_c("INSERT INTO dbo.LowPrice VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,4],"')")),
-           #Close
-           "4" = sqlQuery(db, str_c("INSERT INTO dbo.ClosePrice VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,5],"')")),
-           #Volume
-           "5" = sqlQuery(db, str_c("INSERT INTO dbo.Volume VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,6],"')")),
-           #Adjusted
-           "6" = sqlQuery(db, str_c("INSERT INTO dbo.AdjustedPrice VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,7],"')"))
-    )
+    sqlQuery(db, str_c("INSERT INTO dbo.StockPrice VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,2],"','",tmp[i,3],"','",tmp[i,4],"','",tmp[i,5],"','",tmp[i,6],"','",tmp[i,7],"')"))
   }
 }
-
-#カテゴリすべて追加
-insertSqlDataAll <- function(ticker_id){
-  tmp <- getStock(ticker_id) %>% toDataFrame()
-  for (i in 1:nrow(tmp)){
-    #Open
-    sqlQuery(db, str_c("INSERT INTO dbo.OpenPrice VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,2],"')"))
-    #High
-    sqlQuery(db, str_c("INSERT INTO dbo.HighPrice VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,3],"')"))
-    #Low
-    sqlQuery(db, str_c("INSERT INTO dbo.LowPrice VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,4],"')"))
-    #Close
-    sqlQuery(db, str_c("INSERT INTO dbo.ClosePrice VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,5],"')"))
-    #Volume
-    sqlQuery(db, str_c("INSERT INTO dbo.Volume VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,6],"')"))
-    #Adjusted
-    sqlQuery(db, str_c("INSERT INTO dbo.AdjustedPrice VALUES ('",ticker_id,"','",tmp[i,1],"','",tmp[i,7],"')"))
-    
-  }
-}
-  
